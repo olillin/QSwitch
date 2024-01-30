@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "QSwitch",
+  "description": "Switch between pages quick!",
+  "version": "1.0",
+  "permissions": ["activeTab", "tabs", "storage"],
+  "action": {
+    "default_title": "Click to switch page"
+  },
+  "icons": {
+    "128": "icons/128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options/options.html"
+}
