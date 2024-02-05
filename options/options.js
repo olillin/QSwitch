@@ -1,15 +1,43 @@
-var rules
+var options
 chrome.storage.sync.get(values => {
-    rules = values.rules ?? {}
+    options = values ?? {}
     showRules()
 })
 
 const addButton = document.getElementById('add')
 addButton?.addEventListener('click', addRule)
 const saveButton = document.getElementById('save')
-saveButton?.addEventListener('click', save)
+saveButton?.addEventListener('click', () => {
+    parseRules()
+    save()
+    saveButton.classList.add('saved')
+    saveButton.innerHTML = 'Saved'
+    setTimeout(() => {
+        saveButton.classList.remove('saved')
+        saveButton.innerHTML = 'Save'
+    }, 1500)
+})
+
+const exportDialog = document.getElementById('exportImport')
+const showExport = document.getElementById('showExport')
+showExport?.addEventListener('click', () => {
+    exportDialog.style.display = 'inherit'
+    parseRules()
+    exportOptions()
+})
+const hideExport = document.getElementById('hideExport')
+hideExport?.addEventListener('click', () => {
+    exportDialog.style.display = 'none'
+})
+
+const jsonInput = document.getElementById('json')
+const exportButton = document.getElementById('export')
+exportButton?.addEventListener('click', exportOptions)
+const importButton = document.getElementById('import')
+importButton?.addEventListener('click', importOptions)
 
 function showRules() {
+    const rules = options.rules ?? {}
     console.log(rules)
     const rulesUl = document.getElementById('rulesList')
     rulesUl.innerHTML = ''
@@ -28,7 +56,7 @@ function generateLi(pattern, template) {
     patternInput.className = 'pattern'
     patternInput.name = 'pattern'
     patternInput.value = pattern
-    
+
     const templateLabel = document.createElement('label')
     templateLabel.for = 'template'
     templateLabel.innerHTML = 'Template'
@@ -54,40 +82,33 @@ function generateLi(pattern, template) {
 
 function addRule() {
     parseRules()
-    rules[''] = ''
+    options.rules[''] = ''
     showRules()
 }
 
 function removeRule(key) {
     parseRules()
-    delete rules[key]
+    delete options.rules[key]
     showRules()
 }
 
 function save() {
-    parseRules()
     showRules()
     chrome.storage.sync.set({
-        rules: rules,
+        rules: options.rules,
     })
     updateBackgroundScript()
     console.log('Saved!')
-    saveButton.classList.add('saved')
-    saveButton.innerHTML = 'Saved'
-    setTimeout(() => {
-        saveButton.classList.remove('saved')
-        saveButton.innerHTML = 'Save'
-    }, 1500)
 }
 
 function parseRules() {
     const newRules = {}
     const rulesUl = document.getElementById('rulesList')
     Array.from(rulesUl.childNodes).forEach(li => {
-        let {pattern, template} = parseLi(li)
+        let { pattern, template } = parseLi(li)
         newRules[pattern] = template
     })
-    rules = newRules
+    options.rules = newRules
 }
 
 function parseLi(li) {
@@ -100,5 +121,14 @@ function parseLi(li) {
 }
 
 function updateBackgroundScript() {
-    chrome.runtime.sendMessage({action: 'updateRules'})
+    chrome.runtime.sendMessage({ action: 'updateRules' })
+}
+
+function exportOptions() {
+    jsonInput.value = JSON.stringify(options, null, 2)
+}
+
+function importOptions() {
+    options = JSON.parse(jsonInput.value)
+    save()
 }

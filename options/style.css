@@ -18,7 +18,7 @@ li {
     padding: 0.5em;
 }
 
-input[type=text] {
+input[type=text], textarea {
     font-family: 'Cascadia Mono';
     padding: 0.5em;
     border: none;
@@ -39,7 +39,7 @@ input[type=text] {
     align-items: center;
 }
 
-body > button {
+body > button, dialog > button {
     padding: 1em 0.5em;
     min-width: 100px;
     border: none;
@@ -53,4 +53,17 @@ button:hover {
 
 .saved {
     background-color: #af7;
+}
+
+dialog {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 0 black;
+}
+
+textarea {
+    display: block;
+    width: 800px;
+    max-width: 80vw;
+    margin-bottom: 0.5rem;
 }
