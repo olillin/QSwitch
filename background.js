@@ -18,7 +18,7 @@ chrome.action.onClicked.addListener((tab) => {
     console.log('url:', url)
     for (const [pattern, template] of Object.entries(rules)) {
         console.log(pattern)
-        const regex = new RegExp(pattern)
+        const regex = new RegExp(pattern + '$')
         if (regex.test(url)) {
             let newUrl = urlFromTemplate(url, regex, template)
             console.log('newUrl:' + newUrl)
