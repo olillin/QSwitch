@@ -14,13 +14,16 @@
     </ul>
     <button id="add">Add rule</button>
     <button type="submit" id="save">Save</button>
-    <button id="showExport">Export</button>
+    <button id="showExport">Import/export</button>
     <dialog id="exportImport" hidden>
         <h3>JSON</h3>
         <textarea name="json" id="json" rows="20"></textarea>
-        <button id="export">Update</button>
-        <button id="import">Import</button>
-        <button id="hideExport">Close</button>
+        <span class="buttons">
+            <button id="export" onclick="exportOptions()">Refresh JSON</button>
+            <button id="import" onclick="importOptions()">Import from JSON</button>
+            <button id="download" onclick="downloadOptions()">Download</button>
+            <button id="hideExport">Close</button>
+        </span>
     </dialog>
 
     <script src="options.js"></script>

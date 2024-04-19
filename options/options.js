@@ -31,10 +31,6 @@ hideExport?.addEventListener('click', () => {
 })
 
 const jsonInput = document.getElementById('json')
-const exportButton = document.getElementById('export')
-exportButton?.addEventListener('click', exportOptions)
-const importButton = document.getElementById('import')
-importButton?.addEventListener('click', importOptions)
 
 function showRules() {
     const rules = options.rules ?? {}
@@ -131,4 +127,22 @@ function exportOptions() {
 function importOptions() {
     options = JSON.parse(jsonInput.value)
     save()
+}
+
+function downloadOptions(event) {
+    // Create file
+    const file = new File([jsonInput.value], 'qswitch-options.json', {
+        type: 'application/json',
+    })
+    // Download file
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(file)
+
+    link.href = url
+    link.download = file.name
+    document.body.appendChild(link)
+    link.click()
+
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
 }

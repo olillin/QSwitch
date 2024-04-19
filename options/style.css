@@ -29,6 +29,7 @@ input[type=text], textarea {
 .remove {
     margin-left: 30px;
     width: 30px;
+    min-width: 30px;
     height: 30px;
     background-color: #fbb;
     border: none;
@@ -39,7 +40,7 @@ input[type=text], textarea {
     align-items: center;
 }
 
-body > button, dialog > button {
+button {
     padding: 1em 0.5em;
     min-width: 100px;
     border: none;
@@ -63,7 +64,15 @@ dialog {
 
 textarea {
     display: block;
-    width: 800px;
-    max-width: 80vw;
+    width: 100%;
+    resize: vertical;
+    box-sizing: border-box;
     margin-bottom: 0.5rem;
+}
+
+.buttons {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 8px;
 }
