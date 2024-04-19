@@ -16,7 +16,7 @@ chrome.runtime.onMessage.addListener((req, sender) => {
 chrome.action.onClicked.addListener((tab) => {
     const url = tab.url
     console.log('url:', url)
-    for (const [pattern, template] of Object.entries(rules)) {
+    for (const [pattern, { template }] of Object.entries(rules)) {
         console.log(pattern)
         const regex = new RegExp(pattern + '$')
         if (regex.test(url)) {

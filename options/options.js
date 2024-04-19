@@ -21,7 +21,7 @@ saveButton?.addEventListener('click', () => {
 const exportDialog = document.getElementById('exportImport')
 const showExport = document.getElementById('showExport')
 showExport?.addEventListener('click', () => {
-    exportDialog.style.display = 'inherit'
+    exportDialog.style.display = 'block'
     parseRules()
     exportOptions()
 })
@@ -30,6 +30,12 @@ hideExport?.addEventListener('click', () => {
     exportDialog.style.display = 'none'
 })
 
+const exportButton = document.getElementById('export')
+exportButton?.addEventListener('click', exportOptions)
+const importButton = document.getElementById('import')
+importButton?.addEventListener('click', importOptions)
+const downloadButton = document.getElementById('download')
+downloadButton?.addEventListener('click', downloadOptions)
 const jsonInput = document.getElementById('json')
 
 function showRules() {
@@ -37,13 +43,13 @@ function showRules() {
     console.log(rules)
     const rulesUl = document.getElementById('rulesList')
     rulesUl.innerHTML = ''
-    Array.from(Object.entries(rules)).forEach(([pattern, template]) => {
-        const li = generateLi(pattern, template)
+    Array.from(Object.entries(rules)).forEach(([pattern, { template, comment }]) => {
+        const li = generateLi(pattern, template, comment)
         rulesUl.appendChild(li)
     })
 }
 
-function generateLi(pattern, template) {
+function generateLi(pattern, template, comment) {
     const patternLabel = document.createElement('label')
     patternLabel.for = 'pattern'
     patternLabel.innerHTML = 'Pattern'
@@ -62,6 +68,15 @@ function generateLi(pattern, template) {
     templateInput.name = 'template'
     templateInput.value = template
 
+    const commentLabel = document.createElement('label')
+    commentLabel.for = 'comment'
+    commentLabel.innerHTML = 'Comment'
+    const commentInput = document.createElement('input')
+    commentInput.type = 'text'
+    commentInput.className = 'comment'
+    commentInput.name = 'comment'
+    commentInput.value = comment ?? ''
+
     const removeButton = document.createElement('button')
     removeButton.className = 'remove'
     removeButton.addEventListener('click', () => removeRule(pattern))
@@ -72,6 +87,8 @@ function generateLi(pattern, template) {
     li.appendChild(patternInput)
     li.appendChild(templateLabel)
     li.appendChild(templateInput)
+    li.appendChild(commentLabel)
+    li.appendChild(commentInput)
     li.appendChild(removeButton)
     return li
 }
@@ -101,8 +118,11 @@ function parseRules() {
     const newRules = {}
     const rulesUl = document.getElementById('rulesList')
     Array.from(rulesUl.childNodes).forEach(li => {
-        let { pattern, template } = parseLi(li)
-        newRules[pattern] = template
+        let { pattern, template, comment } = parseLi(li)
+        newRules[pattern] = {
+            template: template,
+            comment: comment,
+        }
     })
     options.rules = newRules
 }
@@ -110,9 +130,11 @@ function parseRules() {
 function parseLi(li) {
     const pattern = li.querySelector('input.pattern').value
     const template = li.querySelector('input.template').value
+    const comment = li.querySelector('input.comment').value
     return {
         pattern: pattern,
         template: template,
+        comment: comment,
     }
 }
 

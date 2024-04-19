@@ -2,6 +2,9 @@
 
 body {
     font-family: 'Roboto';
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 1em;
 }
 
 ul {
@@ -11,8 +14,8 @@ ul {
 
 li {
     display: grid;
-    grid-template-columns: 50px 1fr 60px 1fr 60px;
-    grid-column-gap: 8px;
+    grid-template-columns: 50px 1fr 60px 1fr 50px 1fr 60px;
+    grid-column-gap: 1em;
     align-items: center;
     border-bottom: 1px solid #ddd;
     padding: 0.5em;
@@ -56,7 +59,7 @@ button:hover {
     background-color: #af7;
 }
 
-dialog {
+#exportImport {
     border: none;
     border-radius: 8px;
     box-shadow: 0 0 black;
@@ -75,4 +78,8 @@ textarea {
     display: flex;
     flex-flow: row nowrap;
     gap: 8px;
+}
+
+.buttons > button {
+    flex-grow: 1;
 }
